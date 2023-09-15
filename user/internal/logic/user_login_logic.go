@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"errors"
+	"zerofp/models"
+	"zerofp/pkg"
 
 	"zerofp/user/internal/svc"
 	"zerofp/user/internal/types"
@@ -24,7 +27,21 @@ func NewUserLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserLog
 }
 
 func (l *UserLoginLogic) UserLogin(req *types.UserLoginRequest) (resp *types.UserLoginReply, err error) {
-	// todo: add your logic here and delete this line
-
+	resp = new(types.UserLoginReply)
+	ub := new(models.User)
+	err = l.svcCtx.DB.Where("name = ? AND password = ?",
+		req.Username, pkg.Md5(req.Password)).First(ub).Error
+	if err != nil {
+		logx.Error("[DB ERROR] : ", err)
+		err = errors.New("用户名或密码不正确")
+		return
+	}
+	token, err := pkg.GenerateToken(ub.ID, ub.Identity, ub.Name, 3600*24*30)
+	if err != nil {
+		logx.Error("[DB ERROR] : ", err)
+		err = errors.New("用户名或密码不正确")
+		return
+	}
+	resp.Token = token
 	return
 }
