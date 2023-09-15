@@ -9,14 +9,23 @@ import (
 
 var adminServiceAddr = "http://localhost:13001"
 
+var m = map[string]string{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWRlbnRpdHkiOiIxIiwibmFtZSI6ImdldCIsImV4cCI6MTY5NzM3MTI0MX0.E2HzKuYYXOrPB2Rr-1DrJMJ-ciN8d50aD4Bz5Ui4eBs",
+}
+var header []byte
+
+func init() {
+	header, _ = json.Marshal(m)
+}
+
 func TestProductCreate(t *testing.T) {
 	m2 := map[string]string{
-		"name": "name112",
+		"name": "1111q2",
 		"desc": "desc2",
 	}
 	data, _ := json.Marshal(m2)
 
-	rep, err := pkg.HttpPost(adminServiceAddr+"/product/create", data)
+	rep, err := pkg.HttpPost(adminServiceAddr+"/product/create", data, header...)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,7 +38,7 @@ func TestProductDelete(t *testing.T) {
 	}
 	data, _ := json.Marshal(m)
 
-	rep, err := pkg.HttpDelete(adminServiceAddr+"/product/delete", data)
+	rep, err := pkg.HttpDelete(adminServiceAddr+"/product/delete", data, header...)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -44,7 +53,7 @@ func TestProductModify(t *testing.T) {
 	}
 	data, _ := json.Marshal(m)
 
-	rep, err := pkg.HttpPut(adminServiceAddr+"/product/modify", data)
+	rep, err := pkg.HttpPut(adminServiceAddr+"/product/modify", data, header...)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -53,7 +62,7 @@ func TestProductModify(t *testing.T) {
 
 func TestProductList(t *testing.T) {
 
-	rep, err := pkg.HttpGet(adminServiceAddr + "/product/list?page=1&size=20&name=")
+	rep, err := pkg.HttpGet(adminServiceAddr+"/product/list?page=1&size=20&name=", header...)
 	if err != nil {
 		t.Fatal(err)
 	}

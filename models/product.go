@@ -15,7 +15,7 @@ func (table Product) TableName() string {
 }
 
 func ProductList(name string) *gorm.DB {
-	tx := DB.Model(new(Product)).Select("identity, name, desc, key, created_at")
+	tx := DB.Model(new(Product)).Select("identity, name, `desc`, `key`, created_at")
 	if name != "" {
 		tx.Where("name LIKE ?", "%"+name+"%")
 	}
