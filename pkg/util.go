@@ -18,6 +18,7 @@ func Md5(s string) string {
 	return fmt.Sprintf("%x", md5.Sum([]byte(s)))
 }
 
+// If 如果条件为真，返回 第二个参数，否则返回 第一个参数
 func If(condition bool, trueValue, falseValue interface{}) interface{} {
 	if condition {
 		return trueValue
